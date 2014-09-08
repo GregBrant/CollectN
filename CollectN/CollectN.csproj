@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Graphite">
+      <HintPath>..\packages\Graphite.NET.1.1\lib\net40\Graphite.dll</HintPath>
+    </Reference>
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.3.1.0.0\lib\net45\NLog.dll</HintPath>
     </Reference>
@@ -52,6 +55,9 @@
     <Compile Include="Plugins\CPUPlugin.cs" />
     <Compile Include="Plugins\IInputPlugin.cs" />
     <Compile Include="Plugins\MemoryPlugin.cs" />
+    <Compile Include="Plugins\StatResult.cs" />
+    <Compile Include="Plugins\Write\Graphite.cs" />
+    <Compile Include="Plugins\Write\IWriterPlugin.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

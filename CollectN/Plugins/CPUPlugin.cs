@@ -27,7 +27,7 @@ namespace CollectN.Plugins
                 // Prime the counter 
                 _idleTime.NextValue();
 
-                
+
                 _processorTime = new PerformanceCounter();
                 _processorTime.CategoryName = "Processor";
                 _processorTime.CounterName = "% Processor Time";
@@ -49,7 +49,7 @@ namespace CollectN.Plugins
                 // Prime the counter 
                 _systemTime.NextValue();
 
-                
+
 
                 _interruptTime = new PerformanceCounter();
                 _interruptTime.CategoryName = "Processor";
@@ -60,24 +60,28 @@ namespace CollectN.Plugins
             }
         }
 
-        public void Signal()
+        public IEnumerable<StatResult> Signal()
         {
             using (Profiler.Step("CPU Signal"))
             {
+                var resultCollection = new List<StatResult>();
+
                 var idle = _idleTime.NextValue();
-                Console.WriteLine("CPU:\t% Idle Time\t{0}%", idle);
+                resultCollection.Add(new StatResult { Key = "CPU.idle-time", Value = (int)idle });
 
                 var processor = _processorTime.NextValue();
-                Console.WriteLine("CPU:\t% Processor Time\t{0}%", processor);
-                
+                resultCollection.Add(new StatResult { Key = "CPU.processor-time", Value = (int)processor });
+
                 var user = _userTime.NextValue();
-                Console.WriteLine("CPU:\t% User Time\t{0}%", user);
+                resultCollection.Add(new StatResult { Key = "CPU.user-time", Value = (int)user });
 
-                var priv = _userTime.NextValue();
-                Console.WriteLine("CPU:\t% Privileged Time\t{0}%", priv);
+                var priv = _systemTime.NextValue();
+                resultCollection.Add(new StatResult { Key = "CPU.privileged-time", Value = (int)priv });
 
-                var interrupt = _userTime.NextValue();
-                Console.WriteLine("CPU:\t% Interrupt Time\t{0}%", interrupt);
+                var interrupt = _interruptTime.NextValue();
+                resultCollection.Add(new StatResult { Key = "CPU.interrupt-time", Value = (int)interrupt });
+
+                return resultCollection;
             }
         }
     }

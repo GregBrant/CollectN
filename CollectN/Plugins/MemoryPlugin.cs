@@ -24,12 +24,17 @@ namespace CollectN.Plugins
             }
         }
 
-        public void Signal()
+        public IEnumerable<StatResult> Signal()
         {
             using (Profiler.Step("Memory Signal"))
             {
-                var available = _availableBytes.NextValue();
+                var available = Convert.ToInt32(_availableBytes.NextValue());
                 Console.WriteLine("Memory:\tAvailable MBytes\t{0}", available);
+
+                var resultCollection = new List<StatResult>();
+                resultCollection.Add(new StatResult { Key = "Memory.Available-MBytes", Value = available });
+
+                return resultCollection;
             }
         }
     }

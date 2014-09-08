@@ -5,8 +5,9 @@ using System.Text;
 
 namespace CollectN.Plugins
 {
-    interface IInputPlugin
+    public class StatResult
     {
-        IEnumerable<StatResult> Signal();
+        public string Key { get; set; }
+        public int Value { get; set; }
     }
 }

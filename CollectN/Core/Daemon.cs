@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
-using System.Timers;
 using CollectN.Debug;
 using CollectN.Plugins;
+using CollectN.Plugins.Write;
+using Graphite = CollectN.Plugins.Write.Graphite;
+using Timer = System.Timers.Timer;
 
 namespace CollectN.Core
 {
@@ -14,6 +17,7 @@ namespace CollectN.Core
         private Timer _timer;
 
         private IInputPlugin[] plugins;
+        private IWriterPlugin[] writers;
 
         public void Start()
         {
@@ -23,6 +27,11 @@ namespace CollectN.Core
             {
                 new CpuPlugin(),
                 new MemoryPlugin(), 
+            };
+
+            writers = new IWriterPlugin[]
+            {
+                new Plugins.Write.Graphite(),
             };
 
             _timer = new Timer(10 * 1000);
@@ -42,10 +51,12 @@ namespace CollectN.Core
             Console.WriteLine("Signalling plugins");
             using (Profiler.Step("Signalling plugins"))
             {
-                foreach (var inputPlugin in plugins)
-                {
-                    inputPlugin.Signal();
-                }
+                var stats = (from plugin in plugins.AsParallel()
+                             select plugin.Signal())
+                             .SelectMany(x => x)
+                             .ToList();
+
+                Parallel.ForEach(writers, x => x.Write("collectd", Environment.MachineName, stats));
             }
         }
     }
