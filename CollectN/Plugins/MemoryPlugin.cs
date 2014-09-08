@@ -10,17 +10,15 @@ namespace CollectN.Plugins
 {
     class MemoryPlugin : IInputPlugin
     {
-        private readonly PerformanceCounter _availableBytes;
+        private readonly PerformanceCounter[] _counters;
 
         public MemoryPlugin()
         {
             using (Profiler.Step("Memory Init"))
             {
-                _availableBytes = new PerformanceCounter();
-                _availableBytes.CategoryName = "memory";
-                _availableBytes.CounterName = "Available MBytes";
-                // Prime the counter 
-                _availableBytes.NextValue();
+                var category = new PerformanceCounterCategory("Memory");
+
+                _counters = category.GetCounters();
             }
         }
 
@@ -28,11 +26,15 @@ namespace CollectN.Plugins
         {
             using (Profiler.Step("Memory Signal"))
             {
-                var available = Convert.ToInt32(_availableBytes.NextValue());
-                Console.WriteLine("Memory:\tAvailable MBytes\t{0}", available);
-
                 var resultCollection = new List<StatResult>();
-                resultCollection.Add(new StatResult { Key = "Memory.Available-MBytes", Value = available });
+
+                foreach (var performanceCounter in _counters)
+                {
+                    var value = performanceCounter.NextValue();
+                    var name = ("memory" + performanceCounter.InstanceName +
+                                "." + performanceCounter.CounterName.Replace("/", "-")).Replace(" ", "-").ToLower();
+                    resultCollection.Add(new StatResult { Key = name, Value = (int)value });
+                }
 
                 return resultCollection;
             }
