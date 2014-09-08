@@ -55,7 +55,7 @@
     <Compile Include="Plugins\CPUPlugin.cs" />
     <Compile Include="Plugins\IInputPlugin.cs" />
     <Compile Include="Plugins\MemoryPlugin.cs" />
-    <Compile Include="Plugins\StatResult.cs" />
+    <Compile Include="Core\StatResult.cs" />
     <Compile Include="Plugins\Write\Graphite.cs" />
     <Compile Include="Plugins\Write\IWriterPlugin.cs" />
     <Compile Include="Program.cs" />

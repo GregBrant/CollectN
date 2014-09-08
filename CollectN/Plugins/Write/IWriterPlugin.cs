@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using CollectN.Core;
 
 namespace CollectN.Plugins.Write
 {
