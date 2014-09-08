@@ -65,19 +65,19 @@ namespace CollectN.Plugins
             using (Profiler.Step("CPU Signal"))
             {
                 var idle = _idleTime.NextValue();
-                Console.WriteLine("CPU: % Idle Time {0}%", idle);
+                Console.WriteLine("CPU:\t% Idle Time\t{0}%", idle);
 
                 var processor = _processorTime.NextValue();
-                Console.WriteLine("CPU: % Processor Time {0}%", processor);
+                Console.WriteLine("CPU:\t% Processor Time\t{0}%", processor);
                 
                 var user = _userTime.NextValue();
-                Console.WriteLine("CPU: % User Time {0}%", user);
+                Console.WriteLine("CPU:\t% User Time\t{0}%", user);
 
                 var priv = _userTime.NextValue();
-                Console.WriteLine("CPU: % Privileged Time {0}%", priv);
+                Console.WriteLine("CPU:\t% Privileged Time\t{0}%", priv);
 
                 var interrupt = _userTime.NextValue();
-                Console.WriteLine("CPU: % Interrupt Time {0}%", interrupt);
+                Console.WriteLine("CPU:\t% Interrupt Time\t{0}%", interrupt);
             }
         }
     }

@@ -51,6 +51,7 @@
     <Compile Include="Debug\Profiler.cs" />
     <Compile Include="Plugins\CPUPlugin.cs" />
     <Compile Include="Plugins\IInputPlugin.cs" />
+    <Compile Include="Plugins\MemoryPlugin.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

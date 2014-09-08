@@ -19,9 +19,10 @@ namespace CollectN.Core
         {
             // TODO: Load Plugins
 
-            plugins = new[]
+            plugins = new IInputPlugin[]
             {
-                new CpuPlugin()
+                new CpuPlugin(),
+                new MemoryPlugin(), 
             };
 
             _timer = new Timer(10 * 1000);
