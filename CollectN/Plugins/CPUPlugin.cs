@@ -10,53 +10,18 @@ namespace CollectN.Plugins
 {
     class CpuPlugin : IInputPlugin
     {
-        private readonly PerformanceCounter _idleTime;
-        private readonly PerformanceCounter _processorTime;
-        private readonly PerformanceCounter _userTime;
-        private readonly PerformanceCounter _systemTime;
-        private readonly PerformanceCounter _interruptTime;
+        private readonly PerformanceCounter[] _counters;
 
         public CpuPlugin()
         {
             using (Profiler.Step("CPU Init"))
             {
-                _idleTime = new PerformanceCounter();
-                _idleTime.CategoryName = "Processor";
-                _idleTime.CounterName = "% Idle Time";
-                _idleTime.InstanceName = "_Total";
-                // Prime the counter 
-                _idleTime.NextValue();
+                var category = new PerformanceCounterCategory("Processor");
 
-
-                _processorTime = new PerformanceCounter();
-                _processorTime.CategoryName = "Processor";
-                _processorTime.CounterName = "% Processor Time";
-                _processorTime.InstanceName = "_Total";
-                // Prime the counter 
-                _processorTime.NextValue();
-
-                _userTime = new PerformanceCounter();
-                _userTime.CategoryName = "Processor";
-                _userTime.CounterName = "% User Time";
-                _userTime.InstanceName = "_Total";
-                // Prime the counter 
-                _userTime.NextValue();
-
-                _systemTime = new PerformanceCounter();
-                _systemTime.CategoryName = "Processor";
-                _systemTime.CounterName = "% Privileged Time";
-                _systemTime.InstanceName = "_Total";
-                // Prime the counter 
-                _systemTime.NextValue();
-
-
-
-                _interruptTime = new PerformanceCounter();
-                _interruptTime.CategoryName = "Processor";
-                _interruptTime.CounterName = "% Interrupt Time";
-                _interruptTime.InstanceName = "_Total";
-                // Prime the counter 
-                _interruptTime.NextValue();
+                _counters = (from name in category.GetInstanceNames()
+                             select category.GetCounters(name))
+                            .SelectMany(x => x)
+                            .ToArray();
             }
         }
 
@@ -66,20 +31,13 @@ namespace CollectN.Plugins
             {
                 var resultCollection = new List<StatResult>();
 
-                var idle = _idleTime.NextValue();
-                resultCollection.Add(new StatResult { Key = "CPU.idle-time", Value = (int)idle });
-
-                var processor = _processorTime.NextValue();
-                resultCollection.Add(new StatResult { Key = "CPU.processor-time", Value = (int)processor });
-
-                var user = _userTime.NextValue();
-                resultCollection.Add(new StatResult { Key = "CPU.user-time", Value = (int)user });
-
-                var priv = _systemTime.NextValue();
-                resultCollection.Add(new StatResult { Key = "CPU.privileged-time", Value = (int)priv });
-
-                var interrupt = _interruptTime.NextValue();
-                resultCollection.Add(new StatResult { Key = "CPU.interrupt-time", Value = (int)interrupt });
+                foreach (var performanceCounter in _counters)
+                {
+                    var value = performanceCounter.NextValue();
+                    var name = ("cpu" + performanceCounter.InstanceName +
+                                "." + performanceCounter.CounterName.Replace("/", "-")).Replace(" ", "-").ToLower();
+                    resultCollection.Add(new StatResult { Key = name, Value = (int)value });
+                }
 
                 return resultCollection;
             }
