@@ -50,7 +50,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\ApplicationConfiguration.cs" />
+    <Compile Include="Core\ConfigurationFile.cs" />
     <Compile Include="Core\ConfigParser.cs" />
     <Compile Include="Core\Daemon.cs" />
     <Compile Include="Debug\Profiler.cs" />

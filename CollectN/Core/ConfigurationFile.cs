@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CollectN.Core
 {
-    public class ApplicationConfiguration
+    public class ConfigurationFile
     {
         private readonly Dictionary<string, object> _data = new Dictionary<string, object>(); 
 

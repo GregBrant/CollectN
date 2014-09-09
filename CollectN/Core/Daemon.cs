@@ -21,19 +21,21 @@ namespace CollectN.Core
 
         public void Start()
         {
+            var configFile = LoadConfig();
+
             // TODO: Load Plugins
 
             plugins = new IInputPlugin[]
             {
-                new CpuPlugin(),
-                new MemoryPlugin(), 
+                new CpuPlugin(configFile),
+                new MemoryPlugin(configFile), 
                 // Interface plugin removed until it's performance is improved
-                // new InterfacePlugin(), 
+                // new InterfacePlugin(configFile), 
             };
 
             writers = new IWriterPlugin[]
             {
-                new Plugins.Write.Graphite(),
+                new Plugins.Write.Graphite(configFile),
             };
 
             _timer = new Timer(10 * 1000);
@@ -46,6 +48,13 @@ namespace CollectN.Core
         {
             _timer.Stop();
             _timer.Dispose();
+        }
+
+        private ConfigurationFile LoadConfig()
+        {
+            var parser = new ConfigParser();
+            var config = parser.Parse("collectn.conf");
+            return config;
         }
 
         private void SignalAllPlugins()

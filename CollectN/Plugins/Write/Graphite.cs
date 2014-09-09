@@ -13,9 +13,9 @@ namespace CollectN.Plugins.Write
     {
         private GraphiteTcpClient _client;
 
-        private Random r = new Random();
-
-        public Graphite()
+        private ConfigurationFile config;
+        
+        public Graphite(ConfigurationFile config)
         {
             using (Profiler.Step("Graphite Init"))
             {

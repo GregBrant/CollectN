@@ -12,6 +12,7 @@ namespace CollectN.Plugins
     class CpuPlugin : IInputPlugin
     {
         private readonly PerformanceCounter[] _counters;
+        private ConfigurationFile config;
 
         public CpuPlugin()
         {
@@ -24,6 +25,12 @@ namespace CollectN.Plugins
                             .SelectMany(x => x)
                             .ToArray();
             }
+        }
+
+        public CpuPlugin(ConfigurationFile config)
+        {
+            // TODO: Complete member initialization
+            this.config = config;
         }
 
         public IEnumerable<StatResult> Signal()

@@ -12,6 +12,7 @@ namespace CollectN.Plugins
     class MemoryPlugin : IInputPlugin
     {
         private readonly PerformanceCounter[] _counters;
+        private ConfigurationFile config;
 
         public MemoryPlugin()
         {
@@ -21,6 +22,12 @@ namespace CollectN.Plugins
 
                 _counters = category.GetCounters();
             }
+        }
+
+        public MemoryPlugin(ConfigurationFile config)
+        {
+            // TODO: Complete member initialization
+            this.config = config;
         }
 
         public IEnumerable<StatResult> Signal()

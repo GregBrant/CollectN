@@ -14,14 +14,14 @@ namespace CollectN.Core
     {
         private static Logger _log = LogManager.GetCurrentClassLogger();
 
-        public ApplicationConfiguration Parse(string path)
+        public ConfigurationFile Parse(string path)
         {
             throw new NotImplementedException();
         }
 
-        public ApplicationConfiguration Parse(Stream stream)
+        public ConfigurationFile Parse(Stream stream)
         {
-            var config = new ApplicationConfiguration();
+            var config = new ConfigurationFile();
 
             using (var reader = new StreamReader(stream))
             {
@@ -37,7 +37,7 @@ namespace CollectN.Core
             return config;
         }
 
-        private void ParseLine(ApplicationConfiguration config, string line, int lineNumber)
+        private void ParseLine(ConfigurationFile config, string line, int lineNumber)
         {
             var space = line.IndexOf(' ');
             var key = line.Substring(0, space);
