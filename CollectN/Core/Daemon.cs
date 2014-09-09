@@ -27,6 +27,8 @@ namespace CollectN.Core
             {
                 new CpuPlugin(),
                 new MemoryPlugin(), 
+                // Interface plugin removed until it's performance is improved
+                // new InterfacePlugin(), 
             };
 
             writers = new IWriterPlugin[]
