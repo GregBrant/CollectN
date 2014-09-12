@@ -8,7 +8,7 @@ namespace CollectN.Core
 {
     public class ConfigurationFile
     {
-        private readonly Dictionary<string, object> _data = new Dictionary<string, object>(); 
+        private readonly Dictionary<string, object> _data = new Dictionary<string, object>();
 
         public bool ContainsKey(string key)
         {
@@ -19,6 +19,11 @@ namespace CollectN.Core
         {
             get { return _data[key] as string; }
             set { _data[key] = value; }
+        }
+
+        public int Count
+        {
+            get { return _data.Count; }
         }
     }
 }

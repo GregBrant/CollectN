@@ -6,6 +6,6 @@ namespace CollectN.Plugins.Write
 {
     public interface IWriterPlugin
     {
-        void Write(string application, string hostname, IEnumerable<StatResult> data);
+        void Write(string application, IEnumerable<StatResult> data);
     }
 }

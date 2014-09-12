@@ -22,26 +22,46 @@ namespace CollectN.Core
         public void Start()
         {
             var configFile = LoadConfig();
+            var config = ProcessConfig(configFile);
 
             // TODO: Load Plugins
 
             plugins = new IInputPlugin[]
             {
-                new CpuPlugin(configFile),
-                new MemoryPlugin(configFile), 
+                new CpuPlugin(config),
+                new MemoryPlugin(config), 
                 // Interface plugin removed until it's performance is improved
-                // new InterfacePlugin(configFile), 
+                // new InterfacePlugin(config), 
             };
 
             writers = new IWriterPlugin[]
             {
-                new Plugins.Write.Graphite(configFile),
+                new Plugins.Write.Graphite(config),
             };
 
             _timer = new Timer(10 * 1000);
             _timer.AutoReset = true;
             _timer.Elapsed += (sender, args) => SignalAllPlugins();
             _timer.Start();
+        }
+
+        private ApplicationConfiguration ProcessConfig(ConfigurationFile configFile)
+        {
+            var x = typeof(IConfigurationWhatsit);
+            var interestedParties = AppDomain.CurrentDomain.GetAssemblies()
+                                             .ToList()
+                                             .SelectMany(a => a.GetTypes())
+                                             .Where(t => x.IsAssignableFrom(t))
+                                             .Where(t => t.IsClass)
+                                             .Where(t => !t.IsAbstract);
+
+            var config = new ApplicationConfiguration();
+            foreach (var type in interestedParties)
+            {
+                var instance = (IConfigurationWhatsit)Activator.CreateInstance(type);
+                instance.Munge(config, configFile);
+            }
+            return config;
         }
 
         public void Stop()
@@ -67,7 +87,7 @@ namespace CollectN.Core
                              .SelectMany(x => x)
                              .ToList();
 
-                Parallel.ForEach(writers, x => x.Write("collectd", Environment.MachineName, stats));
+                Parallel.ForEach(writers, x => x.Write("collectd", stats));
             }
         }
     }

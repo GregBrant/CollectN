@@ -13,24 +13,25 @@ namespace CollectN.Plugins.Write
     {
         private GraphiteTcpClient _client;
 
-        private ConfigurationFile config;
+        private ApplicationConfiguration _config;
         
-        public Graphite(ConfigurationFile config)
+        public Graphite(ApplicationConfiguration config)
         {
             using (Profiler.Step("Graphite Init"))
             {
+                _config = config;
                 _client = new GraphiteTcpClient("192.168.10.34", 2003);
             }
         }
 
-        public void Write(string application, string hostname, IEnumerable<StatResult> data)
+        public void Write(string application, IEnumerable<StatResult> data)
         {
             using (Profiler.Step("Graphite Signal"))
             {
                 foreach (var item in data)
                 {
                     // Report a metric
-                    var name = string.Join(".", application, hostname, item.Key).ToLower();
+                    var name = string.Join(".", application, _config.Hostname, item.Key).ToLower();
                     Console.WriteLine(name, item.Value);
                     _client.Send(name, item.Value);
                 }

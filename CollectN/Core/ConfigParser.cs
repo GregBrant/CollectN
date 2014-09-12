@@ -16,7 +16,7 @@ namespace CollectN.Core
 
         public ConfigurationFile Parse(string path)
         {
-            throw new NotImplementedException();
+            return Parse(File.OpenRead(path));
         }
 
         public ConfigurationFile Parse(Stream stream)
@@ -30,15 +30,30 @@ namespace CollectN.Core
                 while ((line = reader.ReadLine()) != null)
                 {
                     lineNumber++;
-                    ParseLine(config, line, lineNumber);
+                    if (IsConfigLine(line))
+                    {
+                        ParseLine(config, line, lineNumber);
+                    }
                 }
             }
 
             return config;
         }
 
+        private bool IsConfigLine(string line)
+        {
+            var trimmed = line.Trim();
+            if (trimmed.Length == 0 || trimmed[0] == '#')
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         private void ParseLine(ConfigurationFile config, string line, int lineNumber)
         {
+            // TODO: Parse quoted string values
             var space = line.IndexOf(' ');
             var key = line.Substring(0, space);
             var value = line.Substring(space + 1);

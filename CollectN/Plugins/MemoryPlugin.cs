@@ -12,22 +12,17 @@ namespace CollectN.Plugins
     class MemoryPlugin : IInputPlugin
     {
         private readonly PerformanceCounter[] _counters;
-        private ConfigurationFile config;
+        private ApplicationConfiguration _config;
 
-        public MemoryPlugin()
+        public MemoryPlugin(ApplicationConfiguration config)
         {
             using (Profiler.Step("Memory Init"))
             {
+                _config = _config;
                 var category = new PerformanceCounterCategory("Memory");
 
                 _counters = category.GetCounters();
             }
-        }
-
-        public MemoryPlugin(ConfigurationFile config)
-        {
-            // TODO: Complete member initialization
-            this.config = config;
         }
 
         public IEnumerable<StatResult> Signal()

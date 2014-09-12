@@ -12,6 +12,42 @@ namespace CollectN.Tests.Core
     [TestFixture]
     class ConfigParserTests
     {
+        
+        [Test]
+        public void IgnoreWhitespaceLine()
+        {
+            // Arrange
+            var contents = @"  ";
+            var stream = new MemoryStream(Encoding.UTF8.GetBytes(contents));
+            stream.Seek(0, SeekOrigin.Begin);
+
+            var parser = new ConfigParser();
+
+            // Act
+            var config = parser.Parse(stream);
+
+            // Assert
+            Assert.AreEqual(0, config.Count);
+        }
+
+        [Test]
+        public void IgnoreCommentLine()
+        {
+            // Arrange
+            var contents = @"#";
+            var stream = new MemoryStream(Encoding.UTF8.GetBytes(contents));
+            stream.Seek(0, SeekOrigin.Begin);
+
+            var parser = new ConfigParser();
+
+            // Act
+            var config = parser.Parse(stream);
+
+            // Assert
+            Assert.AreEqual(0, config.Count);
+        }
+
+
         [Test]
         public void ParserParsesSimpleKeyValue()
         {

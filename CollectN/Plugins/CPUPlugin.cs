@@ -12,12 +12,13 @@ namespace CollectN.Plugins
     class CpuPlugin : IInputPlugin
     {
         private readonly PerformanceCounter[] _counters;
-        private ConfigurationFile config;
+        private ApplicationConfiguration _config;
 
-        public CpuPlugin()
+        public CpuPlugin(ApplicationConfiguration config)
         {
             using (Profiler.Step("CPU Init"))
             {
+                _config = config;
                 var category = new PerformanceCounterCategory("Processor");
 
                 _counters = (from name in category.GetInstanceNames()
@@ -25,12 +26,6 @@ namespace CollectN.Plugins
                             .SelectMany(x => x)
                             .ToArray();
             }
-        }
-
-        public CpuPlugin(ConfigurationFile config)
-        {
-            // TODO: Complete member initialization
-            this.config = config;
         }
 
         public IEnumerable<StatResult> Signal()

@@ -50,9 +50,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configurators\DaemonConfigurator.cs" />
+    <Compile Include="Core\ApplicationConfiguration.cs" />
     <Compile Include="Core\ConfigurationFile.cs" />
     <Compile Include="Core\ConfigParser.cs" />
     <Compile Include="Core\Daemon.cs" />
+    <Compile Include="Core\IConfigurationWhatsit.cs" />
+    <Compile Include="Core\StringExtensions.cs" />
     <Compile Include="Debug\Profiler.cs" />
     <Compile Include="Plugins\CPUPlugin.cs" />
     <Compile Include="Plugins\IInputPlugin.cs" />
