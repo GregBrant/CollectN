@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using CollectN.Debug;
 using CollectN.Plugins;
 using CollectN.Plugins.Write;
-using Graphite = CollectN.Plugins.Write.Graphite;
-using Timer = System.Timers.Timer;
 
 namespace CollectN.Core
 {
