@@ -12,6 +12,25 @@ namespace CollectN.Tests.Core
     [TestFixture]
     class ConfigParserTests
     {
+
+        [Test]
+        public void LoadPluginAddsPluginNameToPluginsList()
+        {
+            // Arrange
+            var contents = "LoadPlugin cpu";
+            var stream = new MemoryStream(Encoding.UTF8.GetBytes(contents));
+            stream.Seek(0, SeekOrigin.Begin);
+
+            var parser = new ConfigParser();
+
+            // Act
+            var config = parser.Parse(stream);
+
+            // Assert
+            Assert.AreEqual(1, config.Plugins.Count);
+            Assert.True(config.Plugins.Contains("cpu"));
+        }
+
         
         [Test]
         public void IgnoreWhitespaceLine()

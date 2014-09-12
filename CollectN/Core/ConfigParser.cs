@@ -12,6 +12,8 @@ namespace CollectN.Core
 {
     public class ConfigParser
     {
+        private const string DirectiveLoadPlugin = "LoadPlugin";
+
         private static Logger _log = LogManager.GetCurrentClassLogger();
 
         public ConfigurationFile Parse(string path)
@@ -58,9 +60,15 @@ namespace CollectN.Core
             var key = line.Substring(0, space);
             var value = line.Substring(space + 1);
 
+            if (key == DirectiveLoadPlugin)
+            {
+                config.Plugins.Add(value);
+                return;
+            }
+
             if (config.ContainsKey(key))
             {
-                _log.Debug("Overwriting value for '{0}' at like {1}", key, lineNumber);
+                _log.Debug("Overwriting value for '{0}' at line {1}", key, lineNumber);
             }
 
             config[key] = value;

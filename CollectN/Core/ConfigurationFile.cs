@@ -10,6 +10,8 @@ namespace CollectN.Core
     {
         private readonly Dictionary<string, object> _data = new Dictionary<string, object>();
 
+        private readonly List<string> _plugins = new List<string>();
+
         public bool ContainsKey(string key)
         {
             return _data.ContainsKey(key);
@@ -24,6 +26,11 @@ namespace CollectN.Core
         public int Count
         {
             get { return _data.Count; }
+        }
+
+        public ICollection<string> Plugins
+        {
+            get { return _plugins; }
         }
     }
 }
